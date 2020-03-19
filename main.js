@@ -42,26 +42,20 @@ function make_nodes(nodes) {
     edges.filter(e => e.from === node.id).length +
     edges.filter(e => e.to === node.id).length
 
-  // the "title" property takes a string OR an html element to render as a tooltip
-  // when hovering over a node. each node has it's own custom HTML element, with the id
-  const get_html = (node) => Array.from(document.getElementsByClassName("tooltip"))
-    .filter(elem => elem.id == node.id)[0]
-
   const dataset = new vis.DataSet(nodes
     .map(n => Object.assign(n, {label: n.id}))
-    .map(n => Object.assign(n, {value: count_edges(n, EDGES)}))
-    // .map(n => Object.assign(n, {title: get_html(n)}))
-    )
+    .map(n => Object.assign(n, {value: count_edges(n, EDGES)})))
 
   const filter = (node) => TYPES[node.type] === true
   return new vis.DataView(dataset, { filter })
 }
 
 function attachListener(elements, view) {
-  Array.from(elements).forEach(x => x.addEventListener('change', e => {
-    const { value, checked } = e.target
-    TYPES[value] = checked
-    view.refresh()
+  Array.from(elements).forEach(x =>
+    x.addEventListener('change', e => {
+      const { value, checked } = e.target
+      TYPES[value] = checked
+      view.refresh()
   }))
 }
 
@@ -120,44 +114,30 @@ function startNetwork(nodes, edges) {
 }
 
 
-const fn = (network) => {
-// network.on("showPopup", function (...params) {
-//   console.log('showPopup Event', params);
-// });
+const addListeners = (network) => {
 
   const canvas = document.getElementsByTagName('canvas')[0]
 
-  let node = null
+  let node
 
-  network.on("hidePopup", function () {
-    canvas.style = ''
+  const resetCss = () => {
     node.style.visibility = 'hidden'
     canvas.style.filter = ''
-  });
+  }
 
-  network.on("hoverNode", function ({ node: node_id, event }) {
+  const showTooltip = ({ node: node_id, event }) => {
     const { clientX: left, clientY: top } = event
     node = document.getElementById(node_id)
-
     node.style.left = left + 'px'
     node.style.top = top + 'px'
     node.style.visibility = 'visible'
     canvas.style.filter = 'blur(1px)'
+  }
 
-  })
+  network.on("hidePopup", resetCss)
+  network.on("hoverNode", showTooltip)
+
 }
 
 const network = startNetwork(nodes, EDGES)
-fn(network)
-
-  // network.on("click", function (params) {
-  //   const node_id = this.getNodeAt(params.pointer.DOM)
-  //   if (!node_id) {
-  //     Array.from(document.getElementsByClassName("tooltip"))
-  //     .forEach(x => {
-  //       x.style.visibility = 'hidden'
-  //       x.style.filter = ''
-  //       canvas.style.filter = ''
-  //     })
-  //   }
-  // });
+addListeners(network)
