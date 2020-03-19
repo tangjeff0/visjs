@@ -1,17 +1,17 @@
 /* globals vis, document */
 
 const NODES = [
-    { id: "hacker",            type: "identity", },
-    { id: "hustler",           type: "identity"},
-    { id: "Block & Jerry's",   type: "project" },
-    { id: "V A P O R D O C S", type: "project" },
-    { id: "Ken's Shine",       type: "project" },
-    { id: "powerlifting.ai",   type: "project", shape: "circularImage", image: "images/powerlifting_ai.png"  },
+    { id: "hacker",            type: "identity", shape: "circularImage", image: "images/nerd.png"},
+    { id: "hustler",           type: "identity", shape: "circularImage", image: "images/sunglasses.png"},
+    { id: "Block & Jerry's",   type: "project", shape: "circularImage", image: "images/cherry-garcia.png"},
+    { id: "V A P O R D O C S", type: "project", shape: "circularImage", image: "images/waves.gif" },
+    { id: "Ken's Shine",       type: "project", shape: "circularImage", image: "images/shoe.jpg" },
+    { id: "powerlifting.ai",   type: "project", shape: "circularImage", image: "images/powerlifting_ai.png"},
     { id: "Tesla",             type: "company", shape: "circularImage", image: "images/tesla.jpg" },
-    { id: "GroupRaise",        type: "company", shape: "circularImage", image: "images/groupraise.png" },
-    { id: "LiftIgniter",       type: "company", shape: "circularImage", image: "images/liftigniter.webp"   },
-    { id: "Strata Labs",       type: "company" },
-    { id: "Microsoft",         type: "company", shape: "circularImage", image: "images/msft.png"  },
+    { id: "GroupRaise",        type: "company", shape: "circularImage", image: "images/groupraise.png"},
+    { id: "LiftIgniter",       type: "company", shape: "circularImage", image: "images/liftigniter.webp"},
+    { id: "Strata Labs",       type: "company", shape: "circularImage", image: "images/strata.png"},
+    { id: "Microsoft",         type: "company", shape: "circularImage", image: "images/msft.png"},
 ]
 
 const EDGES = [
@@ -26,7 +26,7 @@ const EDGES = [
     { from: "hacker",  to: "LiftIgniter" },
     { from: "hacker",  to: "Strata Labs" },
     { from: "hacker",  to: "Microsoft" },
-];
+]
 
 const TYPES = {
   "identity": true,
@@ -39,18 +39,19 @@ function make_nodes(nodes) {
   // size of the node proportional to how many edges it has, FROM and TO
   // there are many ways to size a node
   const count_edges = (node, edges) =>
-      edges.filter(e => e.from === node.id).length +
-      edges.filter(e => e.to === node.id).length
+    edges.filter(e => e.from === node.id).length +
+    edges.filter(e => e.to === node.id).length
 
   // the "title" property takes a string OR an html element to render as a tooltip
   // when hovering over a node. each node has it's own custom HTML element, with the id
   const get_html = (node) => Array.from(document.getElementsByClassName("tooltip"))
-  .filter(elem => elem.id == node.id)[0]
+    .filter(elem => elem.id == node.id)[0]
 
   const dataset = new vis.DataSet(nodes
     .map(n => Object.assign(n, {label: n.id}))
     .map(n => Object.assign(n, {value: count_edges(n, EDGES)}))
-    .map(n => Object.assign(n, {title: get_html(n)})))
+    // .map(n => Object.assign(n, {title: get_html(n)}))
+    )
 
   const filter = (node) => TYPES[node.type] === true
   return new vis.DataView(dataset, { filter })
@@ -72,23 +73,25 @@ function startNetwork(nodes, edges) {
   const network = document.getElementById('network');
   const data = { nodes, edges }
   const options = {
-    configure: {
-      container: document.getElementById('configure'),
-    },
+    // configure: { container: document.getElementById('configure'), },
     nodes: {
       shape: 'dot',
       scaling: {
+        min: 20,
+        max: 50,
         label: {
           enabled: true,
-          min: 12,
+          min: 15,
           max: 30,
         }
       },
-      title: "asd...",
+      title: "",
       // chosen: {
       //   node: true
       // },
       color: {
+        // border: 'transparent',
+        background: 'transparent',
         highlight: {
           border: 'red',
           background: 'red',
@@ -109,10 +112,52 @@ function startNetwork(nodes, edges) {
       }
     },
     interaction: {
-      hover: true
+      hover: true,
+      tooltipDelay: 0,
     }
   }
   return new vis.Network(network, data, options);
 }
 
-startNetwork(nodes, EDGES)
+
+const fn = (network) => {
+// network.on("showPopup", function (...params) {
+//   console.log('showPopup Event', params);
+// });
+
+  const canvas = document.getElementsByTagName('canvas')[0]
+
+  let node = null
+
+  network.on("hidePopup", function () {
+    canvas.style = ''
+    node.style.visibility = 'hidden'
+    canvas.style.filter = ''
+  });
+
+  network.on("hoverNode", function ({ node: node_id, event }) {
+    const { clientX: left, clientY: top } = event
+    node = document.getElementById(node_id)
+
+    node.style.left = left + 'px'
+    node.style.top = top + 'px'
+    node.style.visibility = 'visible'
+    canvas.style.filter = 'blur(1px)'
+
+  })
+}
+
+const network = startNetwork(nodes, EDGES)
+fn(network)
+
+  // network.on("click", function (params) {
+  //   const node_id = this.getNodeAt(params.pointer.DOM)
+  //   if (!node_id) {
+  //     Array.from(document.getElementsByClassName("tooltip"))
+  //     .forEach(x => {
+  //       x.style.visibility = 'hidden'
+  //       x.style.filter = ''
+  //       canvas.style.filter = ''
+  //     })
+  //   }
+  // });
