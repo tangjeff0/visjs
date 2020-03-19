@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta charset="utf-8" />
+  <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.js"></script>
+  <link rel="stylesheet" type="text/css" href="main.css"></link>
+  <title>Document</title>
+</head>
+
+<body>
+
+  <div style="display: flex;">
+    <div class="input-container" style="display:flex;">
+      <input class="checkbox" id="project-filter" type="checkbox" value="project" checked></input>
+      <label for="project-filter">project</label>
+    </div>
+    <div class="input-container" style="display:flex;">
+      <input class="checkbox" id="company-filter" type="checkbox" value="company" checked></input>
+      <label for="company-filter">company</label>
+    </div>
+  </div>
+
+  <div id="root">
+    <div id="network"></div>
+    <div id="configure"></div>
+  </div>
+
+  <div class='tooltips'>
+    <div id='hustler' class='tooltip'>
+      <h1>hustler</h1>
+      <p>Elon</p>
+    </div>
+    <div id='hacker' class='tooltip'>
+      <h1>Hacker</h1>
+      <a href="http://www.catb.org/~esr/faqs/hacker-howto.html">How to Become a Hacker</a> </br>
+      <a href="http://www.paulgraham.com/hp.html">Hackers and Painters</a> </br>
+      <a href="http://www.paulgraham.com/gba.html">The Word "Hacker"</a> </br>
+      <a href="http://www.paulgraham.com/gh.html">Great Hackers</a> </br>
+    </div>
+  </div>
+
+  <script type="text/javascript" src="main.js"></script>
+
+</body>
+
+</html>
