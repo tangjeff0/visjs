@@ -16,16 +16,17 @@ body {
 }
 
 #network {
-  width: 50vw;
+  /* width: 50vw; */
+  width: 100vw;
   height: 80vh;
   border: 1px solid lightgray;
 }
 
-#configure {
+/* #configure {
   width: 50vw;
   height: 80vh;
   overflow: scroll;
-}
+} */
 
 .tooltip {
   position: absolute;
