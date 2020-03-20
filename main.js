@@ -1,31 +1,31 @@
 /* globals vis, document */
 
 const NODES = [
-    { id: "hacker",            type: "identity", shape: "circularImage", image: "images/nerd.png"},
-    { id: "hustler",           type: "identity", shape: "circularImage", image: "images/sunglasses.png"},
-    { id: "Block & Jerry's",   type: "project", shape: "circularImage", image: "images/cherry-garcia.png"},
-    { id: "V A P O R D O C S", type: "project", shape: "circularImage", image: "images/waves.gif" },
-    { id: "Ken's Shine",       type: "project", shape: "circularImage", image: "images/shoe.jpg" },
-    { id: "powerlifting.ai",   type: "project", shape: "circularImage", image: "images/powerlifting_ai.png"},
-    { id: "Tesla",             type: "company", shape: "circularImage", image: "images/tesla.jpg" },
-    { id: "GroupRaise",        type: "company", shape: "circularImage", image: "images/groupraise.png"},
-    { id: "LiftIgniter",       type: "company", shape: "circularImage", image: "images/liftigniter.webp"},
-    { id: "Strata Labs",       type: "company", shape: "circularImage", image: "images/strata.png"},
-    { id: "Microsoft",         type: "company", shape: "circularImage", image: "images/msft.png"},
+  { id: "hacker", type: "identity", shape: "circularImage", image: "images/nerd.png" },
+  { id: "hustler", type: "identity", shape: "circularImage", image: "images/sunglasses.png" },
+  { id: "Block & Jerry's", type: "project", shape: "circularImage", image: "images/cherry-garcia.png" },
+  { id: "V A P O R D O C S", type: "project", shape: "circularImage", image: "images/waves.gif" },
+  { id: "Ken's Shine", type: "project", shape: "circularImage", image: "images/shoe.jpg" },
+  { id: "powerlifting.ai", type: "project", shape: "circularImage", image: "images/powerlifting_ai.png" },
+  { id: "Tesla", type: "company", shape: "circularImage", image: "images/tesla-logo.jpg" },
+  { id: "GroupRaise", type: "company", shape: "circularImage", image: "images/groupraise.png" },
+  { id: "LiftIgniter", type: "company", shape: "circularImage", image: "images/liftigniter.webp" },
+  { id: "Strata Labs", type: "company", shape: "circularImage", image: "images/strata.png" },
+  { id: "Microsoft", type: "company", shape: "circularImage", image: "images/msft.png" },
 ]
 
 const EDGES = [
-    { from: "hustler", to: "Ken's Shine" },
-    { from: "hacker",  to: "Ken's Shine" },
-    { from: "hacker",  to: "Block & Jerry's" },
-    { from: "hacker",  to: "V A P O R D O C S" },
-    { from: "hacker",  to: "powerlifting.ai" },
-    { from: "hustler", to: "powerlifting.ai" },
-    { from: "hustler", to: "Tesla" },
-    { from: "hustler", to: "GroupRaise" },
-    { from: "hacker",  to: "LiftIgniter" },
-    { from: "hacker",  to: "Strata Labs" },
-    { from: "hacker",  to: "Microsoft" },
+  { from: "hustler", to: "Ken's Shine" },
+  { from: "hacker", to: "Ken's Shine" },
+  { from: "hacker", to: "Block & Jerry's" },
+  { from: "hacker", to: "V A P O R D O C S" },
+  { from: "hacker", to: "powerlifting.ai" },
+  { from: "hustler", to: "powerlifting.ai" },
+  { from: "hustler", to: "Tesla" },
+  { from: "hustler", to: "GroupRaise" },
+  { from: "hacker", to: "LiftIgniter" },
+  { from: "hacker", to: "Strata Labs" },
+  { from: "hacker", to: "Microsoft" },
 ]
 
 const TYPES = {
@@ -43,8 +43,8 @@ function make_nodes(nodes) {
     edges.filter(e => e.to === node.id).length
 
   const dataset = new vis.DataSet(nodes
-    .map(n => Object.assign(n, {label: n.id}))
-    .map(n => Object.assign(n, {value: count_edges(n, EDGES)})))
+    .map(n => Object.assign(n, { label: n.id }))
+    .map(n => Object.assign(n, { value: count_edges(n, EDGES) })))
 
   const filter = (node) => TYPES[node.type] === true
   return new vis.DataView(dataset, { filter })
@@ -56,7 +56,7 @@ function attachListener(elements, view) {
       const { value, checked } = e.target
       TYPES[value] = checked
       view.refresh()
-  }))
+    }))
 }
 
 const nodes = make_nodes(NODES)
